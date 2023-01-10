@@ -1,6 +1,6 @@
 extends Node
 
-var is_headless_server = true
+var is_headless_server = false
 
 enum {
 	OFFLINE,

@@ -40,7 +40,7 @@ func _ready():
 func _network_peer_connected(id):
 	print("peer connected")
 	if is_server and OnlineGlobal.game_state == OnlineGlobal.ONLINEGAME:
-		get_tree().disconnect_network_peer(id)
+		server.disconnect_peer(id)
 		return
 	print('new player connected')
 	rpc_id(id, "add_player", get_tree().get_network_unique_id(), username)

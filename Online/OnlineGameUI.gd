@@ -16,4 +16,7 @@ func _on_Server_pressed():
 	rpc("end_game")
 
 remotesync func end_game():
-	get_tree().disconnect_network_peer(get_tree().get_network_unique_id())
+	if Network.is_server:
+		Network.server.close_connection()
+	else:
+		Network.client.close_connection()
