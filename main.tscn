@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://UI.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://game_manager.gd" type="Script" id=5]
 [ext_resource path="res://goal.tscn" type="PackedScene" id=6]
 [ext_resource path="res://circ.png" type="Texture" id=7]
+[ext_resource path="res://Ball.gd" type="Script" id=8]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
@@ -18,6 +19,7 @@ script = ExtResource( 5 )
 
 [node name="Node2D" parent="." instance=ExtResource( 3 )]
 position = Vector2( 480, 183 )
+script = ExtResource( 8 )
 
 [node name="player2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 2273, 1052 )
@@ -26,6 +28,7 @@ player_num = 1
 [node name="player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 478, 287 )
 z_index = -1
+player_num = 2
 
 [node name="walls" type="Node2D" parent="."]
 scale = Vector2( 2, 2 )

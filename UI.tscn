@@ -1,17 +1,19 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://timer.gd" type="Script" id=1]
 [ext_resource path="res://scoreboard.gd" type="Script" id=2]
+[ext_resource path="res://Assets/static/Inter-Bold.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Assets/static/Inter-Light.ttf" type="DynamicFontData" id=4]
 
-[sub_resource type="DynamicFontData" id=4]
-font_path = "res://Koulen-Regular.ttf"
+[sub_resource type="DynamicFont" id=4]
+size = 115
+use_filter = true
+font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=2]
-size = 151
-font_data = SubResource( 4 )
-
-[sub_resource type="Theme" id=3]
-default_font = SubResource( 2 )
+[sub_resource type="DynamicFont" id=5]
+size = 64
+use_filter = true
+font_data = ExtResource( 4 )
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -19,11 +21,12 @@ anchor_bottom = 1.0
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="."]
 margin_left = 1634.0
-margin_top = 206.0
+margin_top = 345.0
 margin_right = 2212.0
-margin_bottom = 507.0
-theme = SubResource( 3 )
-custom_colors/default_color = Color( 0, 0, 0, 0.501961 )
+margin_bottom = 527.0
+custom_colors/default_color = Color( 0, 0, 0, 0.333333 )
+custom_fonts/mono_font = SubResource( 4 )
+custom_fonts/normal_font = SubResource( 4 )
 bbcode_enabled = true
 bbcode_text = "[center]1 - 1"
 text = "1 - 1"
@@ -31,11 +34,11 @@ script = ExtResource( 2 )
 
 [node name="timer" type="RichTextLabel" parent="."]
 margin_left = 1634.0
-margin_top = 36.0
+margin_top = 249.0
 margin_right = 2212.0
 margin_bottom = 337.0
-theme = SubResource( 3 )
-custom_colors/default_color = Color( 0, 0, 0, 0.501961 )
+custom_colors/default_color = Color( 0, 0, 0, 0.180392 )
+custom_fonts/normal_font = SubResource( 5 )
 bbcode_enabled = true
 bbcode_text = "[center]1 - 1"
 text = "1 - 1"

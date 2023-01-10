@@ -11,3 +11,4 @@ var active := true
 
 func _process(delta):
 	if active: time -= delta
+
