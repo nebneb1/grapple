@@ -10,7 +10,6 @@ enum {
 
 var game_state = OFFLINE
 
-
 remotesync func lobby_to_game():
 	game_state = ONLINEGAME
 	get_tree().change_scene("res://Online/OnlineGame.tscn")

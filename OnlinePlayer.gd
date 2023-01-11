@@ -11,7 +11,7 @@ const PULL_SPEED := 10.0
 const MAX_HOOKTIME := 2.5
 
 var dashes := 0
-var hooked := false
+var hooked := false setget set_hooked
 var dash_timer = 0.0
 var hook_timer = 0.0
 var velocity := Vector2.ZERO
@@ -23,8 +23,7 @@ var ACCEL := accel
 #anims--
 var circle_rotation := 0.0
 const lines = 32.0
-
-
+var superficial_hooked : bool = false
 
 func _ready():
 	set_network_master(Network.players.keys()[player_num])
@@ -32,7 +31,11 @@ func _ready():
 	Global.players.append([player_num, self])
 	if is_network_master():
 		$Label.text = Network.username
-
+		rpc('set_username', Network.username)
+		
+remote func set_username(new_name):
+	$Label.text = new_name
+	
 func _physics_process(delta):
 	if is_network_master():
 		dash_timer += delta
@@ -53,17 +56,19 @@ func _physics_process(delta):
 			Global.ball.can_hit = true
 		
 		if hooked:
-			Global.ball.gravity_scale = 0
-			Global.ball.apply_central_impulse((global_position-Global.ball.global_position)*PULL_SPEED*delta/500)
+			Global.ball.rpc_unreliable_id(1, 'recieve_client_hook', true, ((global_position-Global.ball.global_position)*PULL_SPEED/500))
+			# velocity for player, this is fine
 			velocity += (Global.ball.global_position-global_position)*PULL_SPEED*delta/100
 			
+			#timing ball
 			hook_timer += delta
-			if global_position.distance_to(Global.ball.position) <= radius+Global.ball.radius or hook_timer >= MAX_HOOKTIME: hooked = false
-			
+			# disconnecting ball
+			if global_position.distance_to(Global.ball.position) <= radius+Global.ball.radius or hook_timer >= MAX_HOOKTIME:
+				set_hooked(false)
+				
 			Global.ball.circle_rotation += 5
 			Global.ball.can_hit = true
 			Global.ball.hit_color = Color(0.75, 0.0, 0.0, 1)
-			
 		else:
 			hook_timer = clamp(hook_timer-delta, 0, MAX_HOOKTIME)
 		
@@ -71,7 +76,13 @@ func _physics_process(delta):
 		
 		circle_rotation += 0.5
 		rpc_unreliable("update_player_pos", global_position)
+#	if hooked:
 	update()
+
+func set_hooked(new_val):
+	hooked = new_val
+	rset('superficial_hooked', hooked)
+	Global.ball.rpc_id(1, 'recieve_client_hook', hooked, Vector2())
 	
 remote func update_player_pos(new_pos):
 	global_position = new_pos
@@ -83,20 +94,19 @@ func _input(event):
 		dashes -= 1
 		velocity = velocity.normalized()*dash_speed
 		if hooked:
-			Global.ball.max_speed *= 2
+			Global.ball.rset_id(1, 'max_speed', Global.ball.max_speed * 2)
 			velocity *= 3
 		dash_timer = 0.0
 	
-	if event.is_action_pressed("hook") and global_position.distance_to(Global.ball.position) <= ring_size+Global.ball.radius:
+	if Input.is_action_just_pressed("hook") and global_position.distance_to(Global.ball.position) <= ring_size+Global.ball.radius:
 		for plr in Global.players:
 			if plr[1].hooked:
-				plr[1].hooked = false
-		hooked = true
-		
+				plr[1].set_hooked(false)
+		set_hooked(true)
 		
 	if event.is_action_released("hook"):
-		hooked = false
-		
+		set_hooked(false)
+
 func _draw():
 	if hooked:
 		draw_line(Vector2.ZERO, Global.ball.global_position-global_position, Color(1,1,1), 5, true)

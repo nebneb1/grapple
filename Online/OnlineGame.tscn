@@ -1,9 +1,9 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Online/OnlineGame.gd" type="Script" id=1]
-[ext_resource path="res://UI.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Inter-Bold.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://Online/OnlineGameUI.gd" type="Script" id=4]
+[ext_resource path="res://scoreboard.gd" type="Script" id=2]
+[ext_resource path="res://Online/OnlineGameUI.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Online/OnlineTimer.gd" type="Script" id=4]
 [ext_resource path="res://Group 2.png" type="Texture" id=5]
 [ext_resource path="res://goal.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Ball.tscn" type="PackedScene" id=7]
@@ -11,10 +11,18 @@
 [ext_resource path="res://circ.png" type="Texture" id=9]
 [ext_resource path="res://OnlinePlayer.gd" type="Script" id=10]
 [ext_resource path="res://OnlineBall.gd" type="Script" id=11]
+[ext_resource path="res://Assets/static/Inter-Light.ttf" type="DynamicFontData" id=12]
+[ext_resource path="res://Assets/static/Inter-Bold.ttf" type="DynamicFontData" id=13]
 
-[sub_resource type="DynamicFont" id=1]
-size = 22
-font_data = ExtResource( 3 )
+[sub_resource type="DynamicFont" id=4]
+size = 115
+use_filter = true
+font_data = ExtResource( 13 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 64
+use_filter = true
+font_data = ExtResource( 12 )
 
 [sub_resource type="Curve" id=2]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
@@ -26,36 +34,36 @@ script = ExtResource( 1 )
 color = Color( 1, 1, 1, 0.294118 )
 polygon = PoolVector2Array( -8, -8, -8, 8, 8, 8, 8, -8 )
 
-[node name="OnlineGameUI" type="CanvasLayer" parent="."]
+[node name="OnlineGameUI" parent="." instance=ExtResource( 3 )]
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="Control"]
+margin_left = 1634.0
+margin_top = 345.0
+margin_right = 2212.0
+margin_bottom = 527.0
+custom_colors/default_color = Color( 0, 0, 0, 0.333333 )
+custom_fonts/mono_font = SubResource( 4 )
+custom_fonts/normal_font = SubResource( 4 )
+bbcode_enabled = true
+bbcode_text = "[center]1 - 1"
+text = "1 - 1"
+script = ExtResource( 2 )
+
+[node name="timer" type="RichTextLabel" parent="Control"]
+margin_left = 1634.0
+margin_top = 249.0
+margin_right = 2212.0
+margin_bottom = 337.0
+custom_colors/default_color = Color( 0, 0, 0, 0.180392 )
+custom_fonts/normal_font = SubResource( 5 )
+bbcode_enabled = true
+bbcode_text = "[center]1 - 1"
+text = "1 - 1"
 script = ExtResource( 4 )
-
-[node name="Control" type="Control" parent="OnlineGameUI"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_pivot_offset = Vector2( -328, 72 )
-
-[node name="MarginContainer" type="MarginContainer" parent="OnlineGameUI/Control"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -188.0
-margin_top = -94.0
-custom_constants/margin_right = 20
-custom_constants/margin_top = 40
-custom_constants/margin_left = 40
-custom_constants/margin_bottom = 20
-
-[node name="Server" type="Button" parent="OnlineGameUI/Control/MarginContainer"]
-margin_left = 40.0
-margin_top = 40.0
-margin_right = 168.0
-margin_bottom = 74.0
-custom_fonts/font = SubResource( 1 )
-disabled = true
-text = "END GAME"
-
-[node name="Control" parent="." instance=ExtResource( 2 )]
 
 [node name="walls" type="Node2D" parent="."]
 scale = Vector2( 2, 2 )
@@ -74,15 +82,15 @@ scale = Vector2( 0.5, 0.5 )
 z_index = -4
 texture = ExtResource( 5 )
 
-[node name="Node2D" parent="." instance=ExtResource( 7 )]
+[node name="OnlineBall" parent="." instance=ExtResource( 7 )]
 position = Vector2( 480, 183 )
 script = ExtResource( 11 )
 
-[node name="player2" parent="." instance=ExtResource( 8 )]
+[node name="OnlinePlayer1" parent="." instance=ExtResource( 8 )]
 position = Vector2( 2273, 1052 )
 script = ExtResource( 10 )
 
-[node name="player" parent="." instance=ExtResource( 8 )]
+[node name="OnlinePlayer2" parent="." instance=ExtResource( 8 )]
 position = Vector2( 478, 287 )
 z_index = -1
 script = ExtResource( 10 )
@@ -116,7 +124,5 @@ emission_rect_extents = Vector2( 1920, 1080 )
 gravity = Vector2( 0, 0 )
 scale_amount_curve = SubResource( 2 )
 color = Color( 0, 0, 0, 1 )
-
-[connection signal="pressed" from="OnlineGameUI/Control/MarginContainer/Server" to="OnlineGameUI" method="_on_Server_pressed"]
 
 [editable path="team_left"]
