@@ -5,6 +5,8 @@ extends Node2D
 # var a = 2
 # var b = "text"
 
+const MATCH_TIME : int = 300
+var time : int = MATCH_TIME
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -17,3 +19,8 @@ func _ready():
 	$transition.emitting = true
 	yield(get_tree().create_timer(1.0), "timeout")
 	get_tree().paused = false
+
+func _process(delta):
+	if Network.is_server: 
+		time -= delta
+		rset_unreliable('time', time)
